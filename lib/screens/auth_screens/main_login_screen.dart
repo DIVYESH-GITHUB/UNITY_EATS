@@ -5,10 +5,12 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:text_divider/text_divider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:unity_eats/auth/NGO/ngo_log_in.dart';
+import 'package:unity_eats/auth/admin/admin_log_in.dart';
 import 'package:unity_eats/screens/auth_screens/user_signup_screen.dart';
 import 'package:unity_eats/state_management/type_of_user.dart';
 import 'package:unity_eats/utils/config.dart';
-import 'package:unity_eats/auth/user/user_login.dart';
+import 'package:unity_eats/auth/user/user_log_in.dart';
 import 'package:unity_eats/utils/text_form_field.dart';
 
 class MainLoginScreen extends StatefulWidget {
@@ -19,7 +21,12 @@ class MainLoginScreen extends StatefulWidget {
 }
 
 class _MainLoginScreenState extends State<MainLoginScreen> {
+  
+  // ############################ GET CONTROLLERS #########################
+
   final typeOfUser = Get.put(TypeOfUser());
+
+  // ############################ TEXT EDITING CONTROLLERS #########################
 
   final TextEditingController _userEmail = TextEditingController();
   final TextEditingController _userPassword = TextEditingController();
@@ -29,6 +36,8 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
 
   final TextEditingController _adminUsername = TextEditingController();
   final TextEditingController _adminPassword = TextEditingController();
+
+  // ############################# ROUNDED BUTTON CONTOLLERS ########################
 
   final RoundedLoadingButtonController _userGoogleController =
       RoundedLoadingButtonController();
@@ -121,7 +130,7 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
                     customTextStyles: const [TextStyle(fontSize: 15)],
                     icons: const [
                       Bootstrap.person,
-                      Icons.fastfood,
+                      FontAwesome.building_ngo,
                       Icons.admin_panel_settings,
                     ],
                   ),
@@ -131,11 +140,11 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
                 ),
                 Obx(() {
                   if (typeOfUser.index?.value == 0) {
-                    return user();
+                    return buildUserLogin();
                   } else if (typeOfUser.index?.value == 1) {
-                    return ngo();
+                    return buildNGOLogin();
                   }
-                  return adminLogin();
+                  return buildAdminLogin();
                 }),
               ],
             ),
@@ -145,7 +154,7 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
     );
   }
 
-  user() {
+  Widget buildUserLogin() {
     return Form(
       child: Column(
         children: [
@@ -171,10 +180,9 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
           const SizedBox(
             height: 10,
           ),
-          RoundedLoadingButton(
-            color: Colors.green.withOpacity(0.75),
-            controller: _userLoginController,
-            onPressed: () {
+          loginButton(
+            _userLoginController,
+            () {
               UserLogIn(
                 userLoginController: _userLoginController,
                 context: context,
@@ -182,22 +190,6 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
                 password: _userPassword.text.trim(),
               ).validate();
             },
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.login),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'Login',
-                  style: TextStyle(
-                    letterSpacing: 1,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
           ),
           const SizedBox(
             height: 15,
@@ -206,7 +198,7 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               const Text(
-                'Dont have a Account ? ',
+                'Don\'t have an account? ',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -228,48 +220,13 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
           const SizedBox(
             height: 20,
           ),
-          const TextDivider(
-            color: Colors.white,
-            thickness: 1,
-            text: Text(
-              'OR',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          RoundedLoadingButton(
-            color: Colors.blueAccent.withOpacity(0.75),
-            controller: _userGoogleController,
-            onPressed: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Logo(
-                  Logos.google,
-                  size: 27,
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                const Text(
-                  'Sign in with Google',
-                  style: TextStyle(
-                    letterSpacing: 1,
-                  ),
-                ),
-              ],
-            ),
-          )
+          buildGoogleSignInButton(_userGoogleController),
         ],
       ),
     );
   }
 
-  ngo() {
+  Widget buildNGOLogin() {
     return Form(
       child: Column(
         children: [
@@ -295,34 +252,24 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
           const SizedBox(
             height: 10,
           ),
-          RoundedLoadingButton(
-            color: Colors.green.withOpacity(0.75),
-            controller: _ngoLoginController,
-            onPressed: () {},
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.login),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'Login',
-                  style: TextStyle(
-                    letterSpacing: 1,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
+          loginButton(
+            _ngoLoginController,
+            () {
+              NgoLogIn(
+                context: context,
+                email: _ngoEmail.text.trim(),
+                ngoLoginController: _ngoLoginController,
+                password: _ngoPassword.text.trim(),
+              ).validate();
+            },
           ),
           const SizedBox(
             height: 7,
           ),
           ElevatedButton(
             style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.red.shade400),
-              shape: MaterialStatePropertyAll(
+              backgroundColor: MaterialStateProperty.all(Colors.red.shade400),
+              shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -358,102 +305,110 @@ class _MainLoginScreenState extends State<MainLoginScreen> {
           const SizedBox(
             height: 10,
           ),
-          RoundedLoadingButton(
-            color: Colors.blueAccent.withOpacity(0.75),
-            controller: _ngoGoogleController,
-            onPressed: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Logo(
-                  Logos.google,
-                  size: 27,
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                const Text(
-                  'Sign in with Google',
-                  style: TextStyle(
-                    letterSpacing: 1,
-                  ),
-                ),
-              ],
-            ),
-          )
+          buildGoogleSignInButton(_ngoGoogleController),
         ],
       ),
     );
   }
 
-  adminLogin() {
+  Widget buildAdminLogin() {
     return Form(
       child: Column(
         children: [
-          TextFormField(
-            controller: _adminUsername,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.person),
-              prefixIconColor: Colors.white,
-              hintText: 'Username',
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.85)),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.white,
-                ),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.white,
-                ),
-              ),
+          textFormField(
+            _adminUsername,
+            TextInputType.name,
+            const Icon(
+              Icons.admin_panel_settings,
             ),
+            'user name',
+            false,
+            true,
           ),
-          TextFormField(
-            controller: _adminPassword,
-            decoration: InputDecoration(
-              prefixIconColor: Colors.white,
-              prefixIcon: const Icon(Icons.key),
-              hintText: 'Password',
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.85)),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.white,
-                ),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.white,
-                ),
-              ),
+          const SizedBox(
+            height: 6,
+          ),
+          textFormField(
+            _adminPassword,
+            TextInputType.visiblePassword,
+            const Icon(
+              Icons.key,
             ),
+            'Password',
+            true,
+            false,
           ),
           const SizedBox(
             height: 10,
           ),
-          RoundedLoadingButton(
-            color: Colors.green.withOpacity(0.75),
-            controller: _adminLoginController,
-            onPressed: () {},
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.login),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'Login',
-                  style: TextStyle(
-                    letterSpacing: 1,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
+          loginButton(
+            _adminLoginController,
+            () {
+              AdminLogIn(
+                adminLoginController: _adminLoginController,
+                context: context,
+                password: _adminPassword.text.trim(),
+                username: _adminUsername.text.trim(),
+              ).validate();
+            },
           ),
           const SizedBox(
             height: 15,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ###################### BUTTONS #####################
+
+  RoundedLoadingButton loginButton(
+      RoundedLoadingButtonController controller, void Function()? onPressed) {
+    return RoundedLoadingButton(
+      color: Colors.green.withOpacity(0.75),
+      controller: controller,
+      onPressed: onPressed,
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            IonIcons.log_in,
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Text(
+            'Log In',
+            style: TextStyle(
+              letterSpacing: 1,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildGoogleSignInButton(RoundedLoadingButtonController controller) {
+    return RoundedLoadingButton(
+      color: Colors.blueAccent.withOpacity(0.75),
+      controller: controller,
+      onPressed: () {},
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Logo(
+            Logos.google,
+            size: 27,
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          const Text(
+            'Sign in with Google',
+            style: TextStyle(
+              letterSpacing: 1,
+            ),
           ),
         ],
       ),

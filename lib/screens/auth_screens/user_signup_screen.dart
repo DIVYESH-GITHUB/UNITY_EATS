@@ -6,7 +6,7 @@ import 'package:text_divider/text_divider.dart';
 import 'package:unity_eats/screens/auth_screens/main_login_screen.dart';
 import 'package:unity_eats/utils/config.dart';
 import 'package:unity_eats/utils/text_form_field.dart';
-import 'package:unity_eats/auth/user/user_signin.dart';
+import 'package:unity_eats/auth/user/user_sign_in.dart';
 
 class UserSignUpScreen extends StatefulWidget {
   const UserSignUpScreen({super.key});
