@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:unity_eats/auth/email_verfication_screen.dart';
+import 'package:unity_eats/screens/auth_screens/email_verfication_screen.dart';
 import 'package:unity_eats/utils/error_snack_bar.dart';
 
 class UserSignIn {
@@ -35,7 +35,18 @@ class UserSignIn {
         await _db.collection('users').doc(email).set({
           'userName': userName,
           'email': email,
+          'firstName': '',
+          'middleName': '',
+          'lastName': '',
+          'phoneNumber': '',
+          'address': '',
+          'gender': '',
+          'imageUrl': '',
+          'totalDonations': 0,
+          'completedDonation': 0,
+          'rejectedDonation': 0,
           'emailVerified': false,
+          'profileCompleted': false,
         });
         userLoginController.reset();
         Get.off(const EmailVerificationScreen());

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:unity_eats/screens/auth_screens/main_login_screen.dart';
-// import 'package:unity_eats/screens/auth_screens/ngo_signup_screen.dart';
-// import 'package:unity_eats/auth/email_verfication_screen.dart';
-// import 'package:unity_eats/screens/auth_screens/main_login_screen.dart';
-// import 'package:unity_eats/screens/auth_screens/ngo_signup_screen.dart';
-// import 'package:unity_eats/screens/auth_screens/user_signup_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:unity_eats/screens/auth_screens/user_complete_profile.screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -23,8 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MainLoginScreen(),
+      home: const UserCompleteProfileScreen(),
       theme: ThemeData(
+        fontFamily: GoogleFonts.abyssinicaSil().fontFamily,
         brightness: Brightness.dark,
       ),
     );

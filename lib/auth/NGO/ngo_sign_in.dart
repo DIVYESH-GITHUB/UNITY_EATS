@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:unity_eats/auth/email_verfication_screen.dart';
+import 'package:unity_eats/screens/auth_screens/email_verfication_screen.dart';
 // import 'package:rounded_loading_button/rounded_loading_button.dart';
 // import 'package:unity_eats/auth/email_verfication_screen.dart';
 import 'package:unity_eats/models/ngo_model.dart';
