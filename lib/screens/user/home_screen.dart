@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:unity_eats/screens/user/add_food_screen.dart';
+import 'package:unity_eats/screens/user/edit_user_pofile_screen.dart';
 import 'package:unity_eats/state_management/user_bottom_nav.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final userBottomNavBar = Get.put(UserBottomNAvBar());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
         () => userBottomNavBar.index.value == 0
             ? homeScreen()
             : userBottomNavBar.index.value == 1
-                ? addScreen()
+                ? const AddFoodScreen()
                 : userBottomNavBar.index.value == 2
                     ? historyScreen()
                     : userProfileScreen(),
@@ -70,12 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
   homeScreen() {
     return const Center(
       child: Text('Home Screen'),
-    );
-  }
-
-  addScreen() {
-    return const Center(
-      child: Text('Add Screen'),
     );
   }
 
@@ -233,6 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Icon(
                         Icons.phone,
+                        color: Colors.yellowAccent,
                       ),
                       const SizedBox(
                         width: 15,
@@ -283,6 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Icon(
                         EvaIcons.home,
+                        color: Colors.yellowAccent,
                       ),
                       const SizedBox(
                         width: 15,
@@ -336,6 +337,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Icon(
                         Icons.person,
+                        color: Colors.yellowAccent,
                       ),
                       const SizedBox(
                         width: 15,
@@ -386,6 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Icon(
                         Icons.mail,
+                        color: Colors.yellowAccent,
                       ),
                       const SizedBox(
                         width: 15,
@@ -594,7 +597,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black.withOpacity(0.2),
                   ),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => const EditUserProfileScreen());
+                    },
                     child: const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 16, vertical: 12),

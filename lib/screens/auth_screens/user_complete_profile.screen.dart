@@ -12,7 +12,7 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:text_divider/text_divider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:unity_eats/auth/user/complete_user_profile.dart';
-import 'package:unity_eats/state_management/user_gender.dart';
+import 'package:unity_eats/state_management/user_gender_com_profile.dart';
 import 'package:unity_eats/utils/error_snack_bar.dart';
 
 class UserCompleteProfileScreen extends StatefulWidget {

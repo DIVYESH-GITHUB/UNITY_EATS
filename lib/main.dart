@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:unity_eats/screens/auth_screens/user_complete_profile.screen.dart';
+import 'package:unity_eats/screens/user/home_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const UserCompleteProfileScreen(),
+      home: const HomeScreen(),
       theme: ThemeData(
         fontFamily: GoogleFonts.abyssinicaSil().fontFamily,
         brightness: Brightness.dark,
