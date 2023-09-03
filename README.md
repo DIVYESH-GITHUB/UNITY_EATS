@@ -8,11 +8,11 @@ UNITY_EATS is a mobile application designed to facilitate food donations from in
 
 The app is divided into three main modules:
 
-1. **Donor Module:** Donors can easily create listings for available food donations. They provide details about the food items, quantity, and pickup location. Donors can also view requests from nearby NGOs and accept or decline them.
+1. **Donor Module:** Donors can easily create listings for available food donations. They provide details about the food items, quantity, and pickup location. Donors can also view requests from nearby NGOs and accept or decline them. Donors can see the feedback given from the NGOs to the food. Rest all basic operations such as editing profiles, ranking, and seeing NGOs can be done.
 
-2. **NGO Module:** NGOs can browse available food donations in their vicinity and request them for distribution to beneficiaries. Donors receive these requests and can choose to fulfill them.
+2. **NGO Module:** NGOs can browse available food donations in their vicinity and request them for distribution to beneficiaries. Donors receive these requests and can choose to fulfill them. on the basis of what the donor has selected, NGOs have to collect the food from a given location or can receive it at their own place. After food is successfully received NGOs can also give feedback to donors about the food by sharing photos also.
 
-3. **Admin Module:** Administrators have the authority to verify and approve new NGO registrations. Once an NGO is verified, it can start receiving food donations.
+3. **Admin Module:** Administrators can verify and approve new NGO registrations. Only admin verification can authorize the NGOs to receive the donations. If the food quality of the donations was not good then NGOs can also report the donor, which will be then taken care of by the admin by reporting the donor. admin can also remove the accounts of NGOs and donors if needed. also admin can keep track of all the donations happening.
 
 In the future, UNITY_EATS plans to expand its capabilities to include donations of other items such as clothes, books, money, toys, and more.
 
@@ -54,12 +54,6 @@ In the future, UNITY_EATS plans to expand its capabilities to include donations 
    
    ```bash
    flutter run
-## Usage
-1. Register as a Donor, NGO, or Administrator.
-2. Donors can create food donation listings.
-3. NGOs can browse listings and request food donations.
-4. Donors can accept or decline NGO requests.
-5. Administrators can verify and approve NGO registrations.
 
 ## Contributing
 Contributions are welcome! Please read the Contribution Guidelines for details on how to contribute to this project.
