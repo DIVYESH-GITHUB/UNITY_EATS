@@ -5,8 +5,11 @@ import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:text_divider/text_divider.dart';
+import 'package:unity_eats/auth/user/store_food_details.dart';
+import 'package:unity_eats/utils/error_snack_bar.dart';
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({super.key});
@@ -16,9 +19,17 @@ class AddFoodScreen extends StatefulWidget {
 }
 
 class _AddFoodScreenState extends State<AddFoodScreen> {
-  RoundedLoadingButtonController address = RoundedLoadingButtonController();
+  RoundedLoadingButtonController getLocation = RoundedLoadingButtonController();
   RoundedLoadingButtonController donate = RoundedLoadingButtonController();
-  TextEditingController jobRoleCtrl = TextEditingController();
+
+  TextEditingController foodSource = TextEditingController();
+  TextEditingController foodDescription = TextEditingController();
+  TextEditingController totalPersonCanFeed = TextEditingController();
+  TextEditingController weight = TextEditingController();
+  TextEditingController address = TextEditingController();
+
+  String date = '';
+  String time = '';
   File? _image;
   Future getImage(ImageSource source) async {
     final image = await ImagePicker().pickImage(source: source);
@@ -33,10 +44,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(
-          Icons.arrow_back_ios_new,
-          color: Colors.black,
-        ),
         title: const Text(
           'Donate Food',
           style: TextStyle(
@@ -46,7 +53,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
           ),
         ),
         backgroundColor: Colors.yellow,
-        centerTitle: true,
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(
@@ -72,6 +78,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                 height: 15,
               ),
               TextField(
+                controller: foodDescription,
                 maxLines: 3,
                 decoration: InputDecoration(
                   isDense: true,
@@ -111,15 +118,18 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                 height: 10,
               ),
               DateTimeFormField(
+                lastDate: DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                ),
                 decoration: InputDecoration(
                   hintStyle: const TextStyle(color: Colors.white70),
                   errorStyle: const TextStyle(color: Colors.redAccent),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)),
-                  suffixIcon: const Icon(
-                    Bootstrap.clock_fill,
-                    color: Colors.blue,
-                  ),
+                  suffixIcon:
+                      const Icon(Icons.calendar_month, color: Colors.blue),
                   hintText: 'Date',
                 ),
                 mode: DateTimeFieldPickerMode.date,
@@ -127,7 +137,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                 validator: (e) =>
                     (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
                 onDateSelected: (DateTime value) {
-                  print(value);
+                  setState(() {
+                    date = '${value.day}-${value.month}-${value.year}';
+                  });
                 },
               ),
               const SizedBox(
@@ -145,6 +157,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                 height: 10,
               ),
               TextField(
+                keyboardType: TextInputType.number,
+                controller: totalPersonCanFeed,
                 decoration: InputDecoration(
                   suffixIcon: const Icon(
                     Icons.person,
@@ -195,17 +209,20 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   suffixIcon: const Icon(
-                    Icons.calendar_month_outlined,
+                    Bootstrap.clock_fill,
                     color: Colors.blue,
                   ),
-                  hintText: 'Date',
+                  hintText: 'Time',
                 ),
                 mode: DateTimeFieldPickerMode.time,
                 autovalidateMode: AutovalidateMode.always,
                 validator: (e) =>
                     (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
                 onDateSelected: (DateTime value) {
-                  print(value);
+                  final formattedTime = DateFormat.jm().format(value);
+                  setState(() {
+                    time = formattedTime;
+                  });
                 },
               ),
               const SizedBox(
@@ -223,9 +240,11 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                 height: 10,
               ),
               TextField(
+                keyboardType: TextInputType.number,
+                controller: weight,
                 decoration: InputDecoration(
                   isDense: true,
-                  hintText: 'Weight of Food',
+                  hintText: 'Weight of Food in Kg',
                   suffixIcon: const Icon(
                     IonIcons.bag,
                     size: 22,
@@ -269,7 +288,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               ),
               RoundedLoadingButton(
                 height: 40,
-                controller: address,
+                controller: getLocation,
                 onPressed: () {},
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -298,6 +317,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                 height: 9,
               ),
               TextField(
+                controller: address,
                 maxLines: 3,
                 decoration: InputDecoration(
                   isDense: true,
@@ -351,7 +371,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                   'freshly prepared',
                   'Other',
                 ],
-                controller: jobRoleCtrl,
+                controller: foodSource,
                 fieldSuffixIcon: const Icon(
                   Icons.arrow_drop_down_circle,
                   size: 26,
@@ -462,7 +482,25 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                 color: Colors.green,
                 height: 50,
                 controller: donate,
-                onPressed: () {},
+                onPressed: () async {
+                  if (_image == null) {
+                    errorSnackBar(context, 'Please select an image');
+                    donate.reset();
+                    return;
+                  }
+                  await StoreFoodDetails(
+                    image: _image!,
+                    foodDescription: foodDescription.text.trim(),
+                    date: date,
+                    time: time,
+                    totalPersonCanFeed: totalPersonCanFeed.text.trim(),
+                    weight: weight.text.trim(),
+                    address: address.text.trim(),
+                    foodSource: foodSource.text.trim(),
+                    context: context,
+                    controller: donate,
+                  ).validate();
+                },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

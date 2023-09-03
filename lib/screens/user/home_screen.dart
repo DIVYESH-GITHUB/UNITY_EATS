@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:unity_eats/screens/user/add_food_screen.dart';
+import 'package:unity_eats/screens/user/donation_history.dart';
 import 'package:unity_eats/screens/user/edit_user_pofile_screen.dart';
 import 'package:unity_eats/state_management/user_bottom_nav.dart';
 
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
             : userBottomNavBar.index.value == 1
                 ? const AddFoodScreen()
                 : userBottomNavBar.index.value == 2
-                    ? historyScreen()
+                    ? const DonationHistoryScreen()
                     : userProfileScreen(),
       ),
       bottomNavigationBar: GNav(
